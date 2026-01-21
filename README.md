@@ -42,20 +42,20 @@ This project follows the **Medallion Architecture (Bronze → Silver → Gold)**
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────┐
-│                     DATA WAREHOUSE ARCHITECTURE                              │
+│                     DATA WAREHOUSE ARCHITECTURE                             │
 ├─────────────────────────────────────────────────────────────────────────────┤
 │                                                                             │
-│   ┌──────────────┐    ┌──────────────┐    ┌──────────────┐                 │
-│   │   BRONZE     │───▶│   SILVER     │───▶│    GOLD      │                 │
-│   │   LAYER      │    │   LAYER      │    │   LAYER     │                 │
-│   │              │    │              │    │             │                 │
-│   │ Raw Data     │    │ Cleaned &    │    │ Business    │                 │
-│   │ Ingestion    │    │ Transformed  │    │ Ready       │                 │
-│   └──────────────┘    └──────────────┘    └──────────────┘                 │
+│   ┌──────────────┐      ┌─────────────┐      ┌─────────────┐                  │
+│   │   BRONZE     │───▶ │   SILVER    │───▶ │    GOLD     │                 │
+│   │   LAYER      │     │   LAYER      │     │   LAYER     │                   │
+│   │              │     │              │     │             │                   │
+│   │ Raw Data     │     │ Cleaned &    │     │ Business    │                   │
+│   │ Ingestion    │     │ Transformed  │     │ Ready       │                   │
+│   └──────────────┘     └──────────────┘     └─────────────┘                  │
 │                                                                             │
-│   • CSV Files           • Data Type Casting      • Star Schema               │
-│   • Raw Tables          • Deduplication          • Fact Tables               │
-│   • Historical Data     • Validation             • Dimension Tables          │
+│   • CSV Files           • Data Type Casting      • Star Schema              │
+│   • Raw Tables          • Deduplication          • Fact Tables              │
+│   • Historical Data     • Validation             • Dimension Tables         │
 │                                                                             │
 └─────────────────────────────────────────────────────────────────────────────┘
 ```
