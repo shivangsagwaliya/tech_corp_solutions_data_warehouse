@@ -2,9 +2,9 @@ USE TechCorpSolutions
 GO
 
 
-DROP TABLE IF  EXISTS bronze.dim_customers
+DROP TABLE IF  EXISTS bronze.customers
 
-CREATE TABLE bronze.dim_customers(
+CREATE TABLE bronze.customers(
 	Customer_ID nvarchar(50) ,
 	Company_Name nvarchar(50) ,
 	Industry nvarchar(50) ,
@@ -19,8 +19,8 @@ CREATE TABLE bronze.dim_customers(
 	Status nvarchar(50) 
 ) 
 
-DROP TABLE IF  EXISTS bronze.dim_employees
-CREATE TABLE bronze.dim_employees(
+DROP TABLE IF  EXISTS bronze.employees
+CREATE TABLE bronze.employees(
 	Employee_ID nvarchar(50) ,
 	First_Name nvarchar(50) ,
 	Last_Name nvarchar(50) ,
@@ -33,8 +33,8 @@ CREATE TABLE bronze.dim_employees(
 	Employment_Status nvarchar(50) 
 )
 
-DROP TABLE IF  EXISTS bronze.dim_products
-CREATE TABLE bronze.dim_products(
+DROP TABLE IF  EXISTS bronze.products
+CREATE TABLE bronze.products(
 	Product_ID nvarchar(50) ,
 	SKU nvarchar(50) ,
 	UPC float ,
@@ -48,8 +48,8 @@ CREATE TABLE bronze.dim_products(
 	Warranty_Months int 
 )
 
-DROP TABLE IF  EXISTS bronze.dim_suppliers
-CREATE TABLE bronze.dim_suppliers(
+DROP TABLE IF  EXISTS bronze.suppliers
+CREATE TABLE bronze.suppliers(
 	Supplier_ID nvarchar(50) ,
 	Supplier_Name nvarchar(50) ,
 	Category nvarchar(50) ,
@@ -62,8 +62,8 @@ CREATE TABLE bronze.dim_suppliers(
 ) 
 
 
-DROP TABLE IF EXISTS bronze.fact_orders
-CREATE TABLE bronze.fact_orders(
+DROP TABLE IF EXISTS bronze.orders
+CREATE TABLE bronze.orders(
 	Order_ID nvarchar(50) ,
 	Order_Date datetime2(7) ,
 	Customer_ID nvarchar(50) ,
@@ -80,4 +80,5 @@ CREATE TABLE bronze.fact_orders(
 	Sales_Employee_ID nvarchar(50) ,
 	Ship_Date nvarchar(50) NULL,
 	Delivery_Date nvarchar(50) NULL
+
 ) 
