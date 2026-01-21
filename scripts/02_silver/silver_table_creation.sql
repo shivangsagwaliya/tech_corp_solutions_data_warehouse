@@ -1,6 +1,6 @@
-DROP TABLE IF  EXISTS silver.dim_customers;
+DROP TABLE IF  EXISTS silver.customers;
 
-CREATE TABLE silver.dim_customers(
+CREATE TABLE silver.customers(
 	Customer_ID nvarchar(50) ,
 	Company_Name nvarchar(50) ,
 	Industry nvarchar(50) ,
@@ -15,8 +15,8 @@ CREATE TABLE silver.dim_customers(
 	Status nvarchar(50) 
 ) 
 
-DROP TABLE IF  EXISTS silver.dim_employees
-CREATE TABLE silver.dim_employees(
+DROP TABLE IF  EXISTS silver.employees
+CREATE TABLE silver.employees(
 	Employee_ID nvarchar(50) ,
 	First_Name nvarchar(50) ,
 	Last_Name nvarchar(50) ,
@@ -29,8 +29,8 @@ CREATE TABLE silver.dim_employees(
 	Employment_Status nvarchar(50) 
 )
 
-DROP TABLE IF  EXISTS silver.dim_products
-CREATE TABLE silver.dim_products(
+DROP TABLE IF  EXISTS silver.products
+CREATE TABLE silver.products(
 	Product_ID nvarchar(50) ,
 	SKU nvarchar(50) ,
 	UPC float ,
@@ -44,8 +44,8 @@ CREATE TABLE silver.dim_products(
 	Warranty_Months int 
 )
 
-DROP TABLE IF EXISTS silver.fact_orders
-CREATE TABLE silver.fact_orders(
+DROP TABLE IF EXISTS silver.orders
+CREATE TABLE silver.orders(
 	Order_ID nvarchar(50) ,
 	Order_Date datetime2(7) ,
 	Customer_ID nvarchar(50) ,
@@ -64,8 +64,8 @@ CREATE TABLE silver.fact_orders(
 	Delivery_Date date
 ) 
 
-DROP TABLE IF  EXISTS silver.dim_suppliers
-CREATE TABLE silver.dim_suppliers(
+DROP TABLE IF  EXISTS silver.suppliers
+CREATE TABLE silver.suppliers(
 	Supplier_ID nvarchar(50) ,
 	Supplier_Name nvarchar(50) ,
 	Category nvarchar(50) ,
@@ -75,4 +75,5 @@ CREATE TABLE silver.dim_suppliers(
 	Payment_Terms nvarchar(50) ,
 	Supplier_Rating float ,
 	Active_Status nvarchar(50) 
+
 ) 
