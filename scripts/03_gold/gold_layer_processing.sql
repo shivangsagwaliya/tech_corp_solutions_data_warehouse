@@ -35,7 +35,7 @@ SELECT
     Email                AS email,
     Acquisition_Date     AS acquisition_date,
     Status               AS status
-FROM silver.dim_customers;
+FROM silver.customers;
 GO
 
 -- =============================================================================
@@ -58,7 +58,7 @@ SELECT
     Supplier_ID         AS supplier_id,
     Stock_Status        AS stock_status,
     Warranty_Months     AS warranty
-FROM silver.dim_products;
+FROM silver.products;
 GO
 
 -- =============================================================================
@@ -78,7 +78,7 @@ SELECT
     Payment_Terms       AS payment_terms,
     Supplier_Rating     AS supplier_rating,
     Active_Status       AS active_status
-FROM silver.dim_suppliers;
+FROM silver.suppliers;
 GO
 
 -- =============================================================================
@@ -99,7 +99,7 @@ SELECT
     Manager_ID                              AS manager_id,
     Office_Location                         AS office_location,
     Employment_Status                       AS employment_status
-FROM silver.dim_employees;
+FROM silver.employees;
 GO
 
 -- =============================================================================
@@ -128,10 +128,10 @@ SELECT
     o.Payment_Method       AS payment_method,
     o.Ship_Date            AS ship_date,
     o.Delivery_Date        AS delivery_date
-FROM silver.fact_orders o
-LEFT JOIN silver.dim_products p
+FROM silver.orders o
+LEFT JOIN silver.products p
     ON o.Product_ID = p.Product_ID
-LEFT JOIN silver.dim_suppliers s
+LEFT JOIN silver.suppliers s
     ON p.Supplier_ID = s.Supplier_ID;
 GO
 
