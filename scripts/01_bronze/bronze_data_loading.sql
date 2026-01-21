@@ -16,12 +16,12 @@ BEGIN
         -- 1. LOAD CUSTOMERS
         -- =====================================================
         SET @start_time = GETDATE();
-        PRINT '[1/5] Loading bronze.dim_customers';
+        PRINT '[1/5] Loading bronze.customers';
         
-        TRUNCATE TABLE bronze.dim_customers;
+        TRUNCATE TABLE bronze.customers;
         
-        BULK INSERT bronze.dim_customers
-        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\dim_customers.csv'
+        BULK INSERT bronze.customers
+        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\customers.csv'
         WITH (
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
@@ -38,12 +38,12 @@ BEGIN
         -- 2. LOAD EMPLOYEES
         -- =====================================================
         SET @start_time = GETDATE();
-        PRINT '[2/5] Loading bronze.dim_employees';
+        PRINT '[2/5] Loading bronze.employees';
         
-        TRUNCATE TABLE bronze.dim_employees;
+        TRUNCATE TABLE bronze.employees;
         
         BULK INSERT bronze.dim_employees
-        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\dim_employees.csv'
+        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\employees.csv'
         WITH (
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
@@ -60,12 +60,12 @@ BEGIN
         -- 3. LOAD PRODUCTS
         -- =====================================================
         SET @start_time = GETDATE();
-        PRINT '[3/5] Loading bronze.dim_products';
+        PRINT '[3/5] Loading bronze.products';
         
-        TRUNCATE TABLE bronze.dim_products;
+        TRUNCATE TABLE bronze.products;
         
         BULK INSERT bronze.dim_products
-        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\dim_products.csv'
+        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\products.csv'
         WITH (
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
@@ -82,12 +82,12 @@ BEGIN
         -- 4. LOAD SUPPLIERS
         -- =====================================================
         SET @start_time = GETDATE();
-        PRINT '[4/5] Loading bronze.dim_suppliers';
+        PRINT '[4/5] Loading bronze.suppliers';
         
-        TRUNCATE TABLE bronze.dim_suppliers;
+        TRUNCATE TABLE bronze.suppliers;
         
-        BULK INSERT bronze.dim_suppliers
-        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\dim_suppliers.csv'
+        BULK INSERT bronze.suppliers
+        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\suppliers.csv'
         WITH (
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
@@ -105,12 +105,12 @@ BEGIN
         -- 5. LOAD ORDERS
         -- =====================================================
         SET @start_time = GETDATE();
-        PRINT '[5/5] Loading bronze.fact_orders';
+        PRINT '[5/5] Loading bronze.orders';
         
-        TRUNCATE TABLE bronze.fact_orders;
+        TRUNCATE TABLE bronze.orders;
         
-        BULK INSERT bronze.fact_orders
-        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\fact_orders.csv'
+        BULK INSERT bronze.orders
+        FROM 'C:\Users\hp\Downloads\cloud_data\PROJECT\orders.csv'
         WITH (
             FIRSTROW = 2,
             FIELDTERMINATOR = ',',
@@ -136,17 +136,17 @@ BEGIN
         PRINT 'Bronze Layer Row Counts:';
         PRINT '-------------------------------------------';
         SELECT 
-            'dim_customers' AS Table_Name, 
+            'customers' AS Table_Name, 
             COUNT(*) AS Row_Count 
-        FROM bronze.dim_customers
+        FROM bronze.customers
         UNION ALL
-        SELECT 'dim_employees', COUNT(*) FROM bronze.dim_employees
+        SELECT 'employees', COUNT(*) FROM bronze.employees
         UNION ALL
-        SELECT 'dim_products', COUNT(*) FROM bronze.dim_products
+        SELECT 'products', COUNT(*) FROM bronze.products
         UNION ALL
-        SELECT 'dim_suppliers', COUNT(*) FROM bronze.dim_suppliers
+        SELECT 'suppliers', COUNT(*) FROM bronze.suppliers
         UNION ALL
-        SELECT 'fact_orders', COUNT(*) FROM bronze.fact_orders;
+        SELECT 'orders', COUNT(*) FROM bronze.orders;
         
     END TRY
     BEGIN CATCH
@@ -166,4 +166,5 @@ GO
 -- =====================================================
 
 EXEC bronze.load_bronze;
+
 GO
