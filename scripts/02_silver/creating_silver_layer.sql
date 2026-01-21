@@ -22,9 +22,9 @@ BEGIN
         PRINT '';
         PRINT '[1/5] Processing Customers';
         
-        TRUNCATE TABLE silver.dim_customers;
+        TRUNCATE TABLE silver.customers;
         
-        INSERT INTO silver.dim_customers (
+        INSERT INTO silver.customers (
             Customer_ID,
             Company_Name,
             Industry,
@@ -70,7 +70,7 @@ BEGIN
             -- Removed duplicates: keeps the first occurrences
             SELECT *, 
                 ROW_NUMBER() OVER(PARTITION BY Customer_ID ORDER BY Customer_ID) AS rn 
-            FROM bronze.dim_customers
+            FROM bronze.customers
         ) t
         WHERE rn = 1;
         
@@ -85,9 +85,9 @@ BEGIN
         SET @start_time = GETDATE();
         PRINT '[2/5] Processing Employees';
         
-        TRUNCATE TABLE silver.dim_employees;
+        TRUNCATE TABLE silver.employees;
         
-        INSERT INTO silver.dim_employees (
+        INSERT INTO silver.employees (
             Employee_ID,
             First_Name,
             Last_Name,
@@ -110,7 +110,7 @@ BEGIN
             COALESCE(Manager_ID, 'No Manager') AS Manager_ID,     -- Replacing  Null Values
             Office_Location,
             Employment_Status
-        FROM bronze.dim_employees;
+        FROM bronze.employees;
         
         SET @rows_processed = @@ROWCOUNT;
         PRINT 'Employees loaded: ' + CAST(@rows_processed AS VARCHAR) + ' rows';
@@ -123,7 +123,7 @@ BEGIN
         SET @start_time = GETDATE();
         PRINT '[3/5] Processing Products';
         
-        TRUNCATE TABLE silver.dim_products;
+        TRUNCATE TABLE silver.products;
         
         -- Calculate average margin by category and brand
         WITH AvgMargin AS (
@@ -131,11 +131,11 @@ BEGIN
                 Category,
                 Brand,
                 ROUND(AVG(Unit_Price_USD - Unit_Cost_USD), 2) AS Avg_Margin   -- Calculating avgerage margin by category for each brand
-            FROM bronze.dim_products
+            FROM bronze.products
             WHERE Unit_Price_USD > Unit_Cost_USD  -- Checking Pricing inconsistencies
             GROUP BY Category, Brand
         )
-        INSERT INTO silver.dim_products (
+        INSERT INTO silver.products (
             Product_ID,
             SKU,
             UPC,
@@ -165,7 +165,7 @@ BEGIN
             Supplier_ID,
             Stock_Status,
             Warranty_Months
-        FROM (SELECT p.*,m.Avg_Margin,ROW_NUMBER() OVER (PARTITION BY Product_ID ORDER BY Product_ID)AS flag FROM bronze.dim_products p
+        FROM (SELECT p.*,m.Avg_Margin,ROW_NUMBER() OVER (PARTITION BY Product_ID ORDER BY Product_ID)AS flag FROM bronze.products p
         LEFT JOIN AvgMargin m 
             ON p.Category = m.Category 
             AND p.Brand = m.Brand)t 
@@ -183,15 +183,15 @@ BEGIN
         PRINT '[4/5] Processing Suppliers';
         
         
-        TRUNCATE TABLE silver.dim_suppliers;
+        TRUNCATE TABLE silver.suppliers;
 
         WITH Imputation AS (
            SELECT 
             AVG(Supplier_Rating) as Avg_Rating, -- Finding avg rating for imputation
             (SELECT TOP(1) City FROM bronze.dim_suppliers GROUP BY City ORDER BY COUNT(*) DESC) as Mode_City  --- Finding Mode
-            FROM bronze.dim_suppliers)
+            FROM bronze.suppliers)
 
-        INSERT INTO silver.dim_suppliers(
+        INSERT INTO silver.suppliers(
             Supplier_ID,
             Supplier_Name,
             Category,
@@ -210,7 +210,7 @@ BEGIN
             s.Payment_Terms,
             COALESCE(s.Supplier_Rating, i.Avg_Rating) AS Supplier_Rating,   --- imputing null rating with mean value
             s.Active_Status
-        FROM bronze.dim_suppliers s
+        FROM bronze.suppliers s
         CROSS JOIN Imputation i;
         
         SET @rows_processed = @@ROWCOUNT;
@@ -224,9 +224,9 @@ BEGIN
         SET @start_time = GETDATE();
         PRINT '[5/5] Processing Orders';
         
-        TRUNCATE TABLE silver.fact_orders
+        TRUNCATE TABLE silver.orders
         
-        INSERT INTO silver.fact_orders (
+        INSERT INTO silver.orders (
             Order_ID,
             Order_Date,
             Customer_ID,
@@ -266,14 +266,14 @@ BEGIN
     SELECT 
         *,
         ROW_NUMBER() OVER(PARTITION BY Order_ID ORDER BY Order_Date DESC) as flag -- flagging duplicate order ID's 
-    FROM bronze.fact_orders
+    FROM bronze.orders
 ) o
         WHERE o.flag=1 AND  
             o.Order_Date BETWEEN '2023-01-01'AND'2023-12-28'
             AND o.Quantity <> 0  
-            AND o.Customer_ID IN (SELECT Customer_ID FROM silver.dim_customers)  -- Valid customers only
-            AND o.Product_ID IN (SELECT Product_ID FROM silver.dim_products)  -- Valid products only
-            AND o.Sales_Employee_ID IN (SELECT Employee_ID FROM silver.dim_employees);  -- Valid employees only
+            AND o.Customer_ID IN (SELECT Customer_ID FROM silver.customers)  -- Valid customers only
+            AND o.Product_ID IN (SELECT Product_ID FROM silver.products)  -- Valid products only
+            AND o.Sales_Employee_ID IN (SELECT Employee_ID FROM silver.employees);  -- Valid employees only
         
         
 
@@ -296,17 +296,17 @@ BEGIN
         PRINT 'Final Row Counts:';
         PRINT '-------------------------------------------';
         SELECT 
-            'dim_customers' AS Table_Name, 
+            'customers' AS Table_Name, 
             COUNT(*) AS Row_Count 
-        FROM silver.dim_customers
+        FROM silver.customers
         UNION ALL
-        SELECT 'dim_employees', COUNT(*) FROM silver.dim_employees
+        SELECT 'employees', COUNT(*) FROM silver.employees
         UNION ALL
-        SELECT 'dim_products', COUNT(*) FROM silver.dim_products
+        SELECT 'products', COUNT(*) FROM silver.products
         UNION ALL
-        SELECT 'dim_suppliers', COUNT(*) FROM silver.dim_suppliers
+        SELECT 'suppliers', COUNT(*) FROM silver.suppliers
         UNION ALL
-        SELECT 'fact_orders', COUNT(*) FROM silver.fact_orders;
+        SELECT 'orders', COUNT(*) FROM silver.orders;
         
     END TRY
     BEGIN CATCH
@@ -327,4 +327,5 @@ GO
 
 EXEC silver.load_silver;
 GO
+
 
