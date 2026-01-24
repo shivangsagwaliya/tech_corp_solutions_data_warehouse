@@ -1,4 +1,4 @@
-# 🏢 TechCorp Solutions Data Warehouse
+# 🏢 Tech Solutions Corp Data Warehouse
 
 <div align="center">
 
@@ -22,7 +22,7 @@
 
 ## 🎯 Overview
 
-This project implements a comprehensive **Enterprise Data Warehouse** for **TechCorp Solutions**, a fictional technology corporation. The warehouse consolidates sales, customer, product, supplier, and employee data from multiple operational systems into a unified analytical platform.
+This project implements a comprehensive **Enterprise Data Warehouse** for **Tech Solutions Corp**, a fictional technology corporation. The warehouse consolidates sales, customer, product, supplier, and employee data from multiple operational systems into a unified analytical platform.
 
 ### Business Objectives
 
@@ -164,35 +164,6 @@ SOURCE SYSTEMS ──▶ STAGING (BRONZE) ──▶ SILVER ──▶ GOLD
 3. **Load**: Publish analytical views in Gold layer
 
 ---
-
-## 🛠️ Setup & Installation
-
-### Prerequisites
-
-* SQL Server 2019+ or Azure SQL Database
-* SQL Server Management Studio (SSMS) / Azure Data Studio
-* Git
-
-### Installation
-
-```bash
-# Clone repository
-git clone https://github.com/shivangsagwaliya/tech_corp_solutions_data_warehouse.git
-cd tech_corp_solutions_data_warehouse
-```
-
-```sql
--- Create database
-CREATE DATABASE TechCorpDW;
-GO
-USE TechCorpDW;
-GO
-
--- Create schemas
-CREATE SCHEMA bronze;
-CREATE SCHEMA silver;
-CREATE SCHEMA gold;
-```
 
 Run scripts in order:
 
